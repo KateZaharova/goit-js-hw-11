@@ -25,10 +25,10 @@ async function handlerFormSubmit(evt) {
     queryStr = formData.get("searchQuery");
     elements.gallery.innerHTML = "";
     elements.btnLoadMore.style.display = "none"; 
-    try {
+  try {
         page = 1;
         getNewPage()
-    } catch (err) {
+       } catch (err) {
          console.log(err);
      } finally {
          evt.target.reset()
@@ -43,7 +43,7 @@ async function getNewPage() {
         
         return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.") 
      }
-    elements.gallery.innerHTML = createMarkup(images);
+    elements.gallery.insertAdjacentHTML("beforeend", createMarkup(images));
     if (per_page * page >= totalHits) {
         elements.btnLoadMore.style.display = "none"; 
         return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
