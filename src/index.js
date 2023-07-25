@@ -1,7 +1,7 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
 
-const axios = require('axios').default;
+//const axios = require('axios').default;
 const per_page = 40;
 
 let totalHits
