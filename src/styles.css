@@ -1,5 +1,13 @@
 body{
     height:100vh;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 100;
+    font-size: 14px;
+}
+
+.link {
+    text-decoration: none;
+    color:black;
 }
 
 .search-form{
@@ -12,22 +20,70 @@ body{
 }
 
 .input{
-    border-radius: 4%;
+    border-radius: 5%;
     margin-right: 10px;
 }
 
 .gallery{
-display: flex;
-justify-content: space-evenly;
-flex-wrap: wrap;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .load-more{
     display:none;
+    background-color: aqua;
+    color: black;
+    border-radius: 10%;
+    font-weight: 700;
+    padding: 10px;
+    transition-property: background-color;
+    transition-duration: 300ms;
+    transition-timing-function: linear;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+.load-more:hover{
+    background-color: yellow;
+}
+
+.btn-submit{
+    background-color: aqua;
+    color: black;
+    border-radius: 10%;
+    font-weight: 700;
+    padding: 10px;
+    transition-property: background-color;
+    transition-duration: 300ms;
+    transition-timing-function: linear;
+}
+
+.btn-submit:hover {
+    background-color: yellow;
+}
+
 
 .photo-card{
-margin:10px;
+    size: adjust 100%;
+    margin:10px;
+
+    }
+
+.info{
+    width:300px;
+display: grid;
+    grid: "likes score-likes" 
+        "views score-views"
+        "comments score-comments"
+        "downloads score-downloads"
+        / 20% 20% 30% 30%; 
+        grid-gap: 0px;
+text-align: center;
 }
 
+
+.info-item::first-line{
+    font-weight: 600;
+}
 

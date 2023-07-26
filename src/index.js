@@ -1,8 +1,11 @@
 import axios from "axios";
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 //const axios = require('axios').default;
 const per_page = 40;
+
 
 let totalHits
 let page = 1;
@@ -15,6 +18,9 @@ const elements = {
     gallery: document.querySelector(".gallery"),
     btnLoadMore:document.querySelector(".load-more")
 }
+
+let lightBoxGallery = new SimpleLightbox('.gallery a');
+
 
 elements.form.addEventListener("submit", handlerFormSubmit)
 elements.btnLoadMore.addEventListener("click", loadNextPage)
@@ -43,7 +49,8 @@ async function getNewPage() {
         
         return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.") 
      }
-    elements.gallery.insertAdjacentHTML("beforeend", createMarkup(images));
+        elements.gallery.insertAdjacentHTML("beforeend", createMarkup(images));
+        lightBoxGallery.refresh()
     if (per_page * page >= totalHits) {
         elements.btnLoadMore.style.display = "none"; 
         return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
@@ -70,23 +77,24 @@ async function searchImg(itemToSearch, page) {
 
 
 function createMarkup(arr) {
-    return arr.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => `<div class="photo-card">
+  return arr.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `<a class="link" href="${largeImageURL}">
+    <div class="photo-card">
   <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300px" height="200px"/>
-  <div class="info">
-    <p class="info-item">
-      <b>Likes ${likes}</b>
+  <div class="info ">
+    <p class="info-item" id="likes">
+      <b id="score-likes">Likes ${likes}</b>
     </p>
-    <p class="info-item">
-      <b>Views ${views}</b>
+    <p class="info-item" id="views">
+      <b id="score-views">Views ${views}</b>
     </p>
-    <p class="info-item">
-      <b>Comments ${comments}</b>
+    <p class="info-item" id="comments">
+      <b id="score-comments">Comments ${comments}</b>
     </p>
-    <p class="info-item">
-      <b>Downloads ${downloads}</b>
+    <p class="info-item" id="downloads">
+      <b id="score-downloads">Downloads ${downloads}</b>
     </p>
   </div>
-</div>`).join('')
+</div></a>`).join('')
 }
 
 function loadNextPage(evt) {
