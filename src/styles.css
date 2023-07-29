@@ -42,6 +42,7 @@ body{
     transition-timing-function: linear;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 10px;
 }
 
 .load-more:hover{

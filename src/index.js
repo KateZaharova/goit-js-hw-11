@@ -6,11 +6,9 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 //const axios = require('axios').default;
 const per_page = 40;
 
-
-let totalHits
+let totalHits;
 let page = 1;
-let queryStr
-
+let queryStr;
 
 const elements = {
     form: document.querySelector(".search-form"),
@@ -21,20 +19,19 @@ const elements = {
 
 let lightBoxGallery = new SimpleLightbox('.gallery a');
 
-
 elements.form.addEventListener("submit", handlerFormSubmit)
 elements.btnLoadMore.addEventListener("click", loadNextPage)
 
 async function handlerFormSubmit(evt) {
     evt.preventDefault();
     const formData = new FormData(evt.currentTarget)
-    queryStr = formData.get("searchQuery");
+  queryStr = formData.get("searchQuery");
     elements.gallery.innerHTML = "";
-    elements.btnLoadMore.style.display = "none"; 
-  try {
+  elements.btnLoadMore.style.display = "none"; 
+      try {
         page = 1;
         getNewPage()
-       } catch (err) {
+     } catch (err) {
          console.log(err);
      } finally {
          evt.target.reset()
@@ -42,22 +39,38 @@ async function handlerFormSubmit(evt) {
 }
 
 async function getNewPage() {
+  const images = await searchImg(queryStr, page);
+  console.log(images);
+  if (0===images.length) {        
+    return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.") 
+  }
+    
+  elements.gallery.insertAdjacentHTML("beforeend", createMarkup(images));  
+  lightBoxGallery.refresh();
+   
+  
+  let scrollSize
+  
+  if (1 === page) {
+    ({ height: scrollSize } = elements.form.getBoundingClientRect());
+  } else {
+    const { height: cardHeight } = elements.gallery.firstElementChild.getBoundingClientRect();
+    scrollSize = cardHeight * 2;
+  }
 
-    const images = await searchImg(queryStr, page);
-    console.log(images);
-    if (0===images.length) {
-        
-        return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.") 
-     }
-        elements.gallery.insertAdjacentHTML("beforeend", createMarkup(images));
-        lightBoxGallery.refresh()
-    if (per_page * page >= totalHits) {
-        elements.btnLoadMore.style.display = "none"; 
-        return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
-    } else {
-        elements.btnLoadMore.style.display = "block";
-    }
+  window.scrollBy({
+    top: scrollSize,
+    behavior: "smooth",
+  });
+  
+  if (per_page * page >= totalHits) {
+    elements.btnLoadMore.style.display = "none"; 
+    return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
+  } else {
+    elements.btnLoadMore.style.display = "block";
+  }
 }
+
 
 
 async function searchImg(itemToSearch, page) {
